@@ -1,5 +1,7 @@
 import * as React from "react";
+import { useUserStore } from "../stores/useUserStore";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,9 +15,23 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import logo from "../assets/logo.svg";
+import toast from "react-hot-toast";
 
 const pages = ["Pricing", "Login"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  {
+    href: "/profile",
+    title: "Profile",
+  },
+  {
+    href: "/dashboard",
+    title: "Dashboard",
+  },
+  {
+    href: "/account",
+    title: "Account",
+  },
+];
 
 function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -24,6 +40,9 @@ function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const { user, logout } = useUserStore();
+  console.log(user);
 
   const navigate = useNavigate();
 
@@ -40,6 +59,23 @@ function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const resp = await logout();
+      if (resp) {
+        toast.success("Logged out successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toast.error("An error occurred: " + error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    }
   };
 
   return (
@@ -112,44 +148,45 @@ function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  {page === "Pricing" ? (
-                    <Typography
-                      sx={{
-                        color: "#545454",
-                        textTransform: "none",
-                        fontWeight: 400,
-                        fontSize: "20px",
-                        lineHeight: "30px",
-                        textAlign: "center",
-                        width: "100%",
-                      }}
-                    >
-                      {page}
-                    </Typography>
-                  ) : (
-                    <Button
-                      sx={{
-                        color: "#ffffff",
-                        textTransform: "none",
-                        backgroundColor: "#000000",
-                        borderRadius: 10,
-                        paddingLeft: 5,
-                        paddingRight: 5,
-                        textAlign: "center",
-                        fontWeight: 400,
-                        fontSize: "15px",
-                        lineHeight: "18.9px",
-                        fontFamily: "Outfit, variable",
-                        width: "100%",
-                      }}
-                    >
-                      {page}
-                    </Button>
-                  )}
-                </MenuItem>
-              ))}
+              {!user &&
+                pages.map((page) => (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    {page === "Pricing" ? (
+                      <Typography
+                        sx={{
+                          color: "#545454",
+                          textTransform: "none",
+                          fontWeight: 400,
+                          fontSize: "20px",
+                          lineHeight: "30px",
+                          textAlign: "center",
+                          width: "100%",
+                        }}
+                      >
+                        {page}
+                      </Typography>
+                    ) : (
+                      <Button
+                        sx={{
+                          color: "#ffffff",
+                          textTransform: "none",
+                          backgroundColor: "#000000",
+                          borderRadius: 10,
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          textAlign: "center",
+                          fontWeight: 400,
+                          fontSize: "15px",
+                          lineHeight: "18.9px",
+                          fontFamily: "Outfit, variable",
+                          width: "100%",
+                        }}
+                      >
+                        {page}
+                      </Button>
+                    )}
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
 
@@ -164,83 +201,96 @@ function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
               marginRight: 4,
             }}
           >
-            {pages.map((page) =>
-              page === "Pricing" ? (
-                <Button
-                  key={page}
-                  onClick={() => navigate("/pricing")}
-                  sx={{
-                    my: 2,
-                    display: "block",
-                    color: "#545454",
-                    textTransform: "none",
-                    textAlign: "center",
-                    fontWeight: 400,
-                    fontSize: "15px",
-                    lineHeight: "18.9px",
-                    fontFamily: "Outfit, variable",
-                  }}
-                >
-                  {page}
-                </Button>
-              ) : (
-                <Button
-                  key={page}
-                  onClick={openModal}
-                  sx={{
-                    my: 2,
-                    display: "block",
-                    color: "#ffffff",
-                    textTransform: "none",
-                    backgroundColor: "#000000",
-                    borderRadius: 10,
-                    paddingLeft: 5,
-                    paddingRight: 5,
-                    textAlign: "center",
-                    fontWeight: 400,
-                    fontSize: "15px",
-                    lineHeight: "18.9px",
-                    fontFamily: "Outfit, variable",
-                  }}
-                >
-                  {page}
-                </Button>
-              )
-            )}
+            {!user &&
+              pages.map((page) =>
+                page === "Pricing" ? (
+                  <Button
+                    key={page}
+                    onClick={() => navigate("/pricing")}
+                    sx={{
+                      my: 2,
+                      display: "block",
+                      color: "#545454",
+                      textTransform: "none",
+                      textAlign: "center",
+                      fontWeight: 400,
+                      fontSize: "15px",
+                      lineHeight: "18.9px",
+                      fontFamily: "Outfit, variable",
+                    }}
+                  >
+                    {page}
+                  </Button>
+                ) : (
+                  <Button
+                    key={page}
+                    onClick={openModal}
+                    sx={{
+                      my: 2,
+                      display: "block",
+                      color: "#ffffff",
+                      textTransform: "none",
+                      backgroundColor: "#000000",
+                      borderRadius: 10,
+                      paddingLeft: 5,
+                      paddingRight: 5,
+                      textAlign: "center",
+                      fontWeight: 400,
+                      fontSize: "15px",
+                      lineHeight: "18.9px",
+                      fontFamily: "Outfit, variable",
+                    }}
+                  >
+                    {page}
+                  </Button>
+                )
+              )}
           </Box>
 
           {/* User Menu Section */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
+          {user && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting, idx) => (
+                  <MenuItem key={idx} onClick={handleCloseUserMenu}>
+                    <Link to={setting.href}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        {setting.title}
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
+                <MenuItem
+                  onClick={async () => {
+                    handleCloseUserMenu();
+                    await handleLogout();
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>Logout</Typography>
                 </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

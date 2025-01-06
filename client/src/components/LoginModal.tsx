@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUserStore } from "../stores/useUserStore";
 import { Modal, Typography, Button, TextField, Paper } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import EmailIcon from "@mui/icons-material/Email";
@@ -6,6 +7,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Formik, Form } from "formik";
 import { loginSchema } from "../schemas/schemas";
+import { UserProps } from "../types/types";
+import toast from "react-hot-toast";
 
 export default function LoginModal({
   isOpen,
@@ -22,9 +25,23 @@ export default function LoginModal({
     email: "",
     password: "",
   };
-  const handleSubmit = (values: any, { setSubmitting }: any) => {
-    console.log(values);
-    setSubmitting;
+
+  const { login, isSubmitting } = useUserStore();
+  const handleSubmit = async (formData: UserProps) => {
+    try {
+      const resp = await login(formData);
+      if (resp) {
+        onClose();
+        toast.success("Logged in successfully");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toast.error("An error occurred: " + error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    }
   };
   return (
     <Modal
@@ -216,7 +233,7 @@ export default function LoginModal({
                         padding: "10px",
                       }}
                     >
-                      Login
+                      {isSubmitting ? "Logging in..." : "Login"}
                     </Button>
                   </Form>
                 )}

@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "copyfiles -f ../.env .",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -17,13 +18,17 @@
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
     "@vitejs/plugin-react": "^4.3.4",
+    "axios": "^1.7.9",
+    "copyfiles": "^2.4.1",
     "formik": "^2.4.6",
     "motion": "^11.15.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.1",
     "react-router-dom": "^7.0.2",
     "yup": "^1.6.1",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.2",
+    "zustand-persist": "^0.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

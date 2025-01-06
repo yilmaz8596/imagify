@@ -71,3 +71,14 @@ export const login = async (req, res, next) => {
     next(createHttpError.InternalServerError(error.message));
   }
 };
+
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
+    await TokenService.invalidateUserTokens(req.user._id);
+    res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    next(createHttpError.InternalServerError(error.message));
+  }
+};
