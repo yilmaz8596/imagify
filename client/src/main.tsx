@@ -3,7 +3,7 @@ import "./index.css";
 import App from "./App.tsx";
 import "@fontsource/outfit";
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./util/theme";
+import { theme } from "./util/theme.ts";
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider theme={theme}>
     <App />
