@@ -5,22 +5,26 @@ import EmailIcon from "@mui/icons-material/Email";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Formik, Form } from "formik";
-import { loginSchema } from "../schemas/schemas";
+import { signupSchema } from "../schemas/schemas";
 
-export default function LoginModal({
-  isOpen,
-  showRegister,
-  onClose,
+export default function RegisterModal({
+  isShow,
+  onHandleClose,
 }: {
-  isOpen: boolean;
-  showRegister: () => void;
-  onClose: () => void;
+  isShow: boolean;
+  onHandleClose: () => void;
 }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
+
   const initialValues = {
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   };
   const handleSubmit = (values: any, { setSubmitting }: any) => {
     console.log(values);
@@ -28,8 +32,8 @@ export default function LoginModal({
   };
   return (
     <Modal
-      open={isOpen}
-      onClose={onClose}
+      open={isShow}
+      onClose={onHandleClose}
       sx={{
         display: "flex",
         alignItems: "center",
@@ -37,7 +41,7 @@ export default function LoginModal({
       }}
     >
       <AnimatePresence>
-        {isOpen && (
+        {isShow && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{
@@ -47,6 +51,7 @@ export default function LoginModal({
                 type: "spring",
                 stiffness: 300,
                 damping: 20,
+                delay: 0.2,
               },
             }}
             exit={{
@@ -62,7 +67,7 @@ export default function LoginModal({
               elevation={3}
               sx={{
                 width: 400,
-                p: 7,
+                p: 5,
                 borderRadius: 4,
               }}
             >
@@ -78,7 +83,7 @@ export default function LoginModal({
                   textAlign: "center",
                 }}
               >
-                Login
+                Register
               </Typography>
               <Typography
                 variant="body2"
@@ -90,11 +95,11 @@ export default function LoginModal({
                   textAlign: "center",
                 }}
               >
-                Welcome back! Please sign in to continue
+                Welcome back! Please sign up to continue
               </Typography>
               <Formik
                 initialValues={initialValues}
-                validationSchema={loginSchema}
+                validationSchema={signupSchema}
                 onSubmit={handleSubmit}
               >
                 {({
@@ -106,6 +111,31 @@ export default function LoginModal({
                   isSubmitting,
                 }) => (
                   <Form>
+                    <TextField
+                      name="name"
+                      label="Name"
+                      variant="outlined"
+                      fullWidth
+                      value={values.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.name && Boolean(errors.name)}
+                      helperText={touched.name && errors.name}
+                      sx={{
+                        mb: 2,
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "30px",
+                          "& fieldset": {
+                            borderRadius: "30px",
+                          },
+                        },
+                      }}
+                      InputProps={{
+                        sx: {
+                          borderRadius: "30px",
+                        },
+                      }}
+                    />
                     <TextField
                       name="email"
                       label="Email"
@@ -177,6 +207,54 @@ export default function LoginModal({
                         },
                       }}
                     />
+                    <TextField
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      variant="outlined"
+                      type={showConfirmPassword ? "text" : "password"}
+                      fullWidth
+                      value={values.confirmPassword}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        touched.confirmPassword &&
+                        Boolean(errors.confirmPassword)
+                      }
+                      helperText={
+                        touched.confirmPassword && errors.confirmPassword
+                      }
+                      sx={{
+                        mb: 2,
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "30px",
+                          "& fieldset": {
+                            borderRadius: "30px",
+                          },
+                        },
+                      }}
+                      InputProps={{
+                        endAdornment: showConfirmPassword ? (
+                          <VisibilityIcon
+                            sx={{
+                              cursor: "pointer",
+                              color: "#007AFF",
+                            }}
+                            onClick={handleClickShowConfirmPassword}
+                          />
+                        ) : (
+                          <VisibilityOffIcon
+                            sx={{
+                              cursor: "pointer",
+                              color: "#007AFF",
+                            }}
+                            onClick={handleClickShowConfirmPassword}
+                          />
+                        ),
+                        sx: {
+                          borderRadius: "30px",
+                        },
+                      }}
+                    />
 
                     <Typography
                       sx={{
@@ -231,7 +309,7 @@ export default function LoginModal({
                   color: "#7a7a7a",
                 }}
               >
-                Don't have an account?{" "}
+                Already have an account?{" "}
                 <Button
                   variant="text"
                   sx={{
@@ -241,9 +319,8 @@ export default function LoginModal({
                     lineHeight: "17.64px",
                     fontWeight: 400,
                   }}
-                  onClick={showRegister}
                 >
-                  Sign Up
+                  Sign In
                 </Button>
               </Typography>
             </Paper>
