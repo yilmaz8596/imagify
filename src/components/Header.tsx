@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,13 +17,15 @@ import logo from "../assets/logo.svg";
 const pages = ["Pricing", "Login"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -165,7 +168,7 @@ function ResponsiveAppBar() {
               page === "Pricing" ? (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => navigate("/pricing")}
                   sx={{
                     my: 2,
                     display: "block",
@@ -183,7 +186,7 @@ function ResponsiveAppBar() {
               ) : (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  onClick={openModal}
                   sx={{
                     my: 2,
                     display: "block",

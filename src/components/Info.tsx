@@ -9,79 +9,112 @@ export default function Info() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        gap: "2rem",
-        padding: "2rem 0",
-        marginTop: "4rem",
+        gap: { xs: "1rem", sm: "2rem" },
+        padding: { xs: "1rem 0", md: "2rem 0" },
+        marginTop: { xs: "2rem", md: "4rem" },
       }}
     >
-      <Box>
+      <Box
+        sx={{ textAlign: "center", maxWidth: "800px", px: { xs: 2, md: 0 } }}
+      >
         <Typography
+          variant="h3"
           sx={{
-            fontSize: "40px",
+            fontSize: { xs: "2.5rem", sm: "3rem", md: "40px" },
             fontWeight: 500,
-            lineHeight: "80px",
+            lineHeight: { xs: "1.2", sm: "1.5", md: "80px" },
             color: "#252525",
-            textAlign: "center",
           }}
         >
           Create AI Images
         </Typography>
         <Typography
+          variant="subtitle1"
           sx={{
-            fontSize: "16px",
+            fontSize: { xs: "14px", sm: "16px" },
             lineHeight: "22px",
             color: "#797484",
             fontWeight: 400,
-            marginBottom: "2rem",
-            textAlign: "center",
+            marginBottom: { xs: "1rem", md: "2rem" },
           }}
         >
           Turn your imaginations into visuals
         </Typography>
       </Box>
+
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "center",
           alignItems: "center",
-          gap: "2rem",
-          textAlign: "left",
+          gap: { xs: "1rem", md: "2rem" },
           width: "100%",
-          margin: "0 auto",
+          maxWidth: "1200px",
         }}
       >
+        {/* Image Container */}
         <Box
           sx={{
-            flex: 1,
+            width: { xs: "100%", md: "50%" },
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            order: { xs: 1, md: 0 },
           }}
         >
-          <img src={sample} alt="sample" width="80%" height="80%" />
-        </Box>
-        <Box
-          sx={{
-            flex: 1,
-          }}
-        >
-          <Typography
+          <Box
             sx={{
-              fontSize: "28px",
-              lineHeight: "38px",
-              color: "#4b445a",
-              fontWeight: 500,
-              textAlign: "left",
+              width: { xs: "100%", sm: "80%", md: "100%" },
+              maxWidth: "500px",
+              position: "relative",
+              aspectRatio: "1/1",
             }}
           >
-            Introducing the AI-Powered Text to <br />
-            Image Generator
-          </Typography>
+            <img
+              src={sample}
+              alt="sample"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "10px",
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Text Container */}
+        <Box
+          sx={{
+            width: { xs: "100%", md: "50%" },
+            order: { xs: 0, md: 1 },
+            px: { xs: 2, md: 0 },
+          }}
+        >
           <Typography
+            variant="h4"
             sx={{
-              fontSize: "16px",
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "28px" },
+              lineHeight: { xs: "1.3", md: "38px" },
+              color: "#4b445a",
+              fontWeight: 500,
+              textAlign: { xs: "center", md: "left" },
+              marginBottom: { xs: "1rem", md: 0 },
+            }}
+          >
+            Introducing the AI-Powered Text to Image Generator
+          </Typography>
+
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: "14px", sm: "16px" },
               lineHeight: "22px",
               color: "#797484",
               fontWeight: 400,
-              marginTop: "2rem",
-              textAlign: "left",
+              marginTop: { xs: "1rem", md: "2rem" },
+              textAlign: { xs: "center", md: "left" },
             }}
           >
             <span>
@@ -96,7 +129,7 @@ export default function Info() {
             <span>
               Simply type in a text prompt, and our cutting-edge AI will
               generate high-quality images in seconds. From product visuals to
-              character designs and portraits, even concepts that don’t yet
+              character designs and portraits, even concepts that don't yet
               exist can be visualized effortlessly. Powered by advanced AI
               technology, the creative possibilities are limitless!
             </span>
