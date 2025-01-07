@@ -94,6 +94,19 @@ export class TokenService {
       throw new Error(error.message);
     }
   }
+
+  static async getRefreshToken(userId) {
+    try {
+      const tokenDoc = await Token.findOne({ user: userId });
+      if (!tokenDoc || !tokenDoc.isActive) {
+        throw new Error("Invalid token");
+      }
+      return tokenDoc.refreshToken;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   static async invalidateUserTokens(userId) {
     await Token.deleteMany({ user: userId });
   }

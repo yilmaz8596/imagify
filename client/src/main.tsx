@@ -4,8 +4,11 @@ import App from "./App.tsx";
 import "@fontsource/outfit";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./util/theme.ts";
+import { AppProvider } from "./context/context.tsx";
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>
+  <AppProvider>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </AppProvider>
 );

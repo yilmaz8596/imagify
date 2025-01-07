@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-import Header from "../components/Header";
+import { useAppContext } from "../context/context";
 import Hero from "../components/Hero";
 import HowItWorks from "../components/HowItWorks";
 import Info from "../components/Info";
@@ -10,19 +9,12 @@ import LoginModal from "../components/LoginModal";
 import RegisterModal from "../components/RegisterModal";
 
 export default function Home() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  const { isOpen, closeModal } = useAppContext();
 
   const openRegisterModal = () => {
-    setIsOpen(false);
+    closeModal();
     setIsRegisterOpen(true);
   };
 
@@ -37,7 +29,6 @@ export default function Home() {
         isShow={isRegisterOpen}
         onHandleClose={() => setIsRegisterOpen(false)}
       />
-      <Header openModal={openModal} />
       <Hero />
       <HowItWorks />
       <Info />

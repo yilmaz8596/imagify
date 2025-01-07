@@ -41,7 +41,7 @@ mongoose.connection.on("error", (error) => {
 mongoose.connection.on("disconnected", () => {
   console.log("Lost MongoDB connection...");
   setTimeout(() => {
-    mongoose.connect(process.env.MONGODB_URI, {
+    mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

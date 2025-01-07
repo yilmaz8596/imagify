@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import createHttpError from "http-errors";
 import { TokenService } from "../services/tokenService.js";
 import { setCookies } from "../utils/setCookies.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
   try {
@@ -78,6 +79,41 @@ export const logout = async (req, res, next) => {
     res.clearCookie("accessToken");
     await TokenService.invalidateUserTokens(req.user._id);
     res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    next(createHttpError.InternalServerError(error.message));
+  }
+};
+
+export const refreshToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      return next(createHttpError.Unauthorized("Not logged in"));
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const storedToken = await TokenService.getRefreshToken(decoded.userId);
+
+    if (refreshToken !== storedToken) {
+      return next(createHttpError.Unauthorized("Invalid token"));
+    }
+
+    const accessToken = jwt.sign(
+      { userId: decoded.userId },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.status(200).json({ message: "Token refreshed successfully" });
   } catch (error) {
     next(createHttpError.InternalServerError(error.message));
   }

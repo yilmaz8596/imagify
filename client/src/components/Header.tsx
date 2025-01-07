@@ -33,7 +33,7 @@ const settings = [
   },
 ];
 
-function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
+function Header({ openModal }: { openModal: () => void }) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -296,4 +296,4 @@ function ResponsiveAppBar({ openModal }: { openModal: () => void }) {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default Header;
