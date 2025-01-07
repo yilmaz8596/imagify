@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Container, CssBaseline, Typography, Button } from "@mui/material";
 import star from "@/assets/star_icon.svg";
 import stargr from "@/assets/star_group.png";
 import sample from "@/assets/images_group.png";
 
 export default function Hero() {
+  const navigate = useNavigate();
   return (
     <React.Fragment>
       <CssBaseline />
@@ -128,6 +130,7 @@ export default function Hero() {
             alignItems: "center",
             gap: "0.5rem",
           }}
+          onClick={() => navigate("/generate")}
         >
           Generate Images
           <img src={stargr} alt="star-gr" width={23} height={23} />

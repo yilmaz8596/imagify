@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
   },
+  creditBalance: {
+    type: Number,
+    default: 3,
+  },
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

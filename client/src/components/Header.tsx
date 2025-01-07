@@ -16,6 +16,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import logo from "../assets/logo.svg";
 import toast from "react-hot-toast";
+import vector from "../assets/Vector.png";
 
 const pages = ["Pricing", "Login"];
 const settings = [
@@ -120,6 +121,10 @@ function Header({ openModal }: { openModal: () => void }) {
             sx={{
               flexGrow: 1,
               display: { xs: "flex", md: "none" },
+              justifyContent: "flex-end",
+              fontFamily: "Outfit, variable",
+              minHeight: "fit-content",
+              minWidth: "fit-content",
             }}
           >
             <IconButton
@@ -146,47 +151,84 @@ function Header({ openModal }: { openModal: () => void }) {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
+              sx={{
+                display: { xs: "block", md: "none" },
+                "& .MuiMenu-paper": {
+                  minWidth: "fit-content",
+                  minHeight: "fit-content",
+                  borderRadius: 0, // Remove border radius
+                  backgroundColor: "#FFFFFF", // Match app bar background
+                },
+                "& .MuiList-root": {
+                  padding: "20px", // Add padding
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px", // Space between menu items
+                  height: "100%",
+                },
+              }}
             >
-              {!user &&
-                pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    {page === "Pricing" ? (
+              {!user
+                ? pages.map((page) => (
+                    <MenuItem
+                      key={page}
+                      onClick={() => {
+                        handleCloseNavMenu();
+                        page === "Pricing" ? navigate("/pricing") : openModal();
+                      }}
+                      sx={{
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: page === "Pricing" ? "#545454" : "#ffffff",
+                          textTransform: "none",
+                          fontWeight: 400,
+                          fontSize: "18px",
+                          fontFamily: "Outfit, variable",
+                          lineHeight: "16px",
+                          textAlign: "center",
+                          width: "100%",
+                          backgroundColor:
+                            page === "Login" ? "#000000" : "transparent",
+                          borderRadius: page === "Login" ? 10 : 0,
+                          padding: page === "Login" ? "15px 20px" : "10px 0",
+                        }}
+                      >
+                        {page}
+                      </Typography>
+                    </MenuItem>
+                  ))
+                : settings.map((setting, idx) => (
+                    <MenuItem
+                      key={idx}
+                      onClick={() => {
+                        handleCloseNavMenu();
+                        navigate(setting.href);
+                      }}
+                      sx={{
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
                       <Typography
                         sx={{
                           color: "#545454",
                           textTransform: "none",
                           fontWeight: 400,
-                          fontSize: "20px",
-                          lineHeight: "30px",
-                          textAlign: "center",
-                          width: "100%",
-                        }}
-                      >
-                        {page}
-                      </Typography>
-                    ) : (
-                      <Button
-                        sx={{
-                          color: "#ffffff",
-                          textTransform: "none",
-                          backgroundColor: "#000000",
-                          borderRadius: 10,
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                          textAlign: "center",
-                          fontWeight: 400,
-                          fontSize: "15px",
-                          lineHeight: "18.9px",
+                          fontSize: "18px",
                           fontFamily: "Outfit, variable",
+                          lineHeight: "16px",
+                          textAlign: "center",
                           width: "100%",
                         }}
                       >
-                        {page}
-                      </Button>
-                    )}
-                  </MenuItem>
-                ))}
+                        {setting.title}
+                      </Typography>
+                    </MenuItem>
+                  ))}
             </Menu>
           </Box>
 
@@ -249,7 +291,44 @@ function Header({ openModal }: { openModal: () => void }) {
 
           {/* User Menu Section */}
           {user && (
-            <Box sx={{ flexGrow: 0 }}>
+            <Box
+              sx={{
+                flexGrow: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  backgroundColor: "#D7EBFF",
+                  padding: "15px",
+                  minWidth: "fit-content",
+                  maxHeight: "55px",
+                  borderRadius: "50px",
+                  display: {
+                    xs: "none",
+                    md: "flex",
+                  },
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <img src={vector} alt="vector" width="30" height="30" />
+                <Typography
+                  sx={{
+                    color: "#000000",
+                    textTransform: "none",
+                    fontWeight: 400,
+                    fontSize: "15px",
+                    lineHeight: "18.9px",
+                    fontFamily: "Outfit, variable",
+                    marginLeft: "10px",
+                  }}
+                >
+                  Credits left: 10
+                </Typography>
+              </Box>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

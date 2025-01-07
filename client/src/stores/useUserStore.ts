@@ -106,6 +106,8 @@ axiosInstance.interceptors.response.use(
       const refreshed = await tokenRefresher.refreshToken();
 
       if (refreshed) {
+        console.log("Token refreshed");
+
         return axiosInstance(originalRequest);
       }
       useUserStore.getState().logout();
